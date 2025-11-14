@@ -25,13 +25,11 @@ class Config:
     ADMIN_EMAIL = 'admin@skilltest.com'
     ADMIN_PASSWORD = 'admin123'  # Will be hashed in production
 
-    # SMTP / contact form
-    SMTP_SERVER = os.getenv('SMTP_SERVER')
-    SMTP_PORT = int(os.getenv('SMTP_PORT', '587'))
-    SMTP_USERNAME = os.getenv('SMTP_USERNAME')
-    SMTP_PASSWORD = os.getenv('SMTP_PASSWORD')
-    SMTP_USE_TLS = (os.getenv('SMTP_USE_TLS', 'true').lower() in ('1', 'true', 'yes'))
-    CONTACT_RECIPIENT = os.getenv('CONTACT_RECIPIENT')
+    # EmailJS configuration (preferred)
+    EMAILJS_SERVICE_ID = os.getenv('EMAILJS_SERVICE_ID')
+    EMAILJS_TEMPLATE_ID = os.getenv('EMAILJS_TEMPLATE_ID')
+    EMAILJS_PUBLIC_KEY = os.getenv('EMAILJS_PUBLIC_KEY')
+    EMAILJS_PRIVATE_KEY = os.getenv('EMAILJS_PRIVATE_KEY')
 
 
 class DevelopmentConfig(Config):

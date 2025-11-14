@@ -1,13 +1,38 @@
 from flask import Blueprint, request, jsonify, current_app
-from email.message import EmailMessage
-import smtplib
-import ssl
+import requests
+
+EMAILJS_ENDPOINT = 'https://api.emailjs.com/api/v1.0/email/send'
 
 contact_bp = Blueprint('contact', __name__)
 
 
 def _normalize(value: str | None) -> str:
     return (value or '').strip()
+
+
+def _send_via_emailjs(config, payload: dict) -> None:
+    service_id = config.get('EMAILJS_SERVICE_ID')
+    template_id = config.get('EMAILJS_TEMPLATE_ID')
+    public_key = config.get('EMAILJS_PUBLIC_KEY')
+    private_key = config.get('EMAILJS_PRIVATE_KEY')
+
+    if not all([service_id, template_id, public_key, private_key]):
+        raise RuntimeError('EmailJS configuration is incomplete.')
+
+    request_body = {
+        'service_id': service_id,
+        'template_id': template_id,
+        'user_id': public_key,
+        'accessToken': private_key,
+        'template_params': payload
+    }
+
+    response = requests.post(EMAILJS_ENDPOINT, json=request_body, timeout=10)
+    if response.status_code >= 400:
+        current_app.logger.error(
+            'EmailJS request failed (%s): %s', response.status_code, response.text
+        )
+        raise RuntimeError('EmailJS request failed')
 
 
 @contact_bp.route('/contact/submit', methods=['POST'])
@@ -31,43 +56,20 @@ def submit_contact():
     if errors:
         return jsonify({'errors': errors}), 400
 
-    app_config = current_app.config
-    smtp_server = app_config.get('SMTP_SERVER')
-    smtp_port = app_config.get('SMTP_PORT')
-    smtp_username = app_config.get('SMTP_USERNAME')
-    smtp_password = app_config.get('SMTP_PASSWORD')
-    smtp_use_tls = app_config.get('SMTP_USE_TLS', True)
-    recipient = app_config.get('CONTACT_RECIPIENT') or smtp_username
+    payload = {
+        'name': name,
+        'email': email,
+        'phone': phone,
+        'subject': subject,
+        'message': message,
+    }
 
-    if not all([smtp_server, smtp_port, smtp_username, smtp_password, recipient]):
-        current_app.logger.error('SMTP configuration is incomplete. Skipping contact email send.')
-        return jsonify({'error': 'Email service not configured.'}), 500
-
-    email_body = (
-        f"You have received a new message from the Skill-Cert contact form.\n\n"
-        f"Name: {name}\n"
-        f"Email: {email}\n"
-        f"Phone: {phone or 'Not provided'}\n"
-        f"Subject: {subject}\n\n"
-        f"Message:\n{message}\n"
-    )
-
-    msg = EmailMessage()
-    msg['Subject'] = f"Skill-Cert Contact: {subject}"
-    msg['From'] = smtp_username
-    msg['To'] = recipient
-    msg['Reply-To'] = email
-    msg.set_content(email_body)
+    config = current_app.config
 
     try:
-        context = ssl.create_default_context()
-        with smtplib.SMTP(smtp_server, smtp_port) as smtp:
-            if smtp_use_tls:
-                smtp.starttls(context=context)
-            smtp.login(smtp_username, smtp_password)
-            smtp.send_message(msg)
-    except Exception as exc:  # pragma: no cover - log and hide internal details from response
-        current_app.logger.exception('Failed to send contact email: %s', exc)
+        _send_via_emailjs(config, payload)
+    except Exception as exc:  # pragma: no cover
+        current_app.logger.exception('EmailJS send failed: %s', exc)
         return jsonify({'error': 'Failed to send message. Please try again later.'}), 500
 
     return jsonify({'message': 'Message sent successfully.'}), 200
