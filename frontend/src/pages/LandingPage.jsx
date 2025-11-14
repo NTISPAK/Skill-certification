@@ -2,11 +2,25 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { CATEGORIES } from '../data/categories';
+import { sendContactMessage } from '../utils/api';
+
+const resolveApiBase = () => {
+  if (process.env.REACT_APP_API_URL) {
+    return process.env.REACT_APP_API_URL;
+  }
+  if (typeof window !== 'undefined') {
+    return `${window.location.origin}/api`;
+  }
+  return 'http://localhost:5001/api';
+};
 
 const LandingPage = () => {
   const location = useLocation();
   const [showSuccess, setShowSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const successTimeoutRef = useRef(null);
+  const apiBase = resolveApiBase();
 
   useEffect(() => {
     return () => {
@@ -31,20 +45,46 @@ const LandingPage = () => {
     }
   }, [location]);
 
-  const handleContactSubmit = (event) => {
+  const handleContactSubmit = async (event) => {
     event.preventDefault();
+
+    const formData = new FormData(event.target);
+    const payload = {
+      name: formData.get('name') || '',
+      email: formData.get('email') || '',
+      phone: formData.get('phone') || '',
+      subject: formData.get('subject') || '',
+      message: formData.get('message') || '',
+    };
 
     if (successTimeoutRef.current) {
       clearTimeout(successTimeoutRef.current);
     }
 
-    event.target.reset();
-    setShowSuccess(true);
+    setErrorMessage('');
+    setIsSubmitting(true);
 
-    successTimeoutRef.current = setTimeout(() => {
-      setShowSuccess(false);
-      successTimeoutRef.current = null;
-    }, 4000);
+    try {
+      await sendContactMessage(payload);
+      event.target.reset();
+      setShowSuccess(true);
+      successTimeoutRef.current = setTimeout(() => {
+        setShowSuccess(false);
+        successTimeoutRef.current = null;
+      }, 4000);
+    } catch (error) {
+      const apiErrors = error?.response?.data?.errors;
+      const apiMessage = error?.response?.data?.error;
+      if (Array.isArray(apiErrors) && apiErrors.length) {
+        setErrorMessage(apiErrors.join(' '));
+      } else if (apiMessage) {
+        setErrorMessage(apiMessage);
+      } else {
+        setErrorMessage('Failed to send your message. Please try again later.');
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const categories = CATEGORIES;
@@ -472,8 +512,6 @@ const LandingPage = () => {
   const [isTranslating, setIsTranslating] = useState(false);
   const [translationError, setTranslationError] = useState(null);
 
-  const API_BASE = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_BASE) || 'http://localhost:5001/api';
-
   const openCategoryModal = (category) => {
     setSelectedCategory(category);
     setIsModalOpen(true);
@@ -515,7 +553,7 @@ const LandingPage = () => {
       setIsTranslating(true);
       setTranslationError(null);
       const texts = [info.category, ...info.keyPoints];
-      const res = await fetch(`${API_BASE}/translate/texts`, {
+      const res = await fetch(`${apiBase}/translate/texts`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ texts, target: 'ur' })
@@ -867,6 +905,12 @@ const LandingPage = () => {
                   </div>
                 )}
 
+                {errorMessage && (
+                  <div className="p-4 bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-200 text-sm font-semibold">
+                    {errorMessage}
+                  </div>
+                )}
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2" htmlFor="contact-name">
@@ -875,6 +919,7 @@ const LandingPage = () => {
                     <input
                       id="contact-name"
                       type="text"
+                      name="name"
                       placeholder="Your Name"
                       className="w-full px-4 py-3 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition"
                     />
@@ -886,6 +931,7 @@ const LandingPage = () => {
                     <input
                       id="contact-email"
                       type="email"
+                      name="email"
                       placeholder="you@example.com"
                       className="w-full px-4 py-3 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition"
                     />
@@ -900,6 +946,7 @@ const LandingPage = () => {
                     <input
                       id="contact-phone"
                       type="tel"
+                      name="phone"
                       placeholder="e.g. +92 300 1234567"
                       className="w-full px-4 py-3 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition"
                     />
@@ -911,6 +958,7 @@ const LandingPage = () => {
                     <input
                       id="contact-subject"
                       type="text"
+                      name="subject"
                       placeholder="How can we help?"
                       className="w-full px-4 py-3 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition"
                     />
@@ -924,6 +972,7 @@ const LandingPage = () => {
                   <textarea
                     id="contact-message"
                     rows="5"
+                    name="message"
                     placeholder="Tell us a little about your needs..."
                     className="w-full px-4 py-3 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition resize-none"
                   ></textarea>
@@ -932,8 +981,9 @@ const LandingPage = () => {
                 <button
                   type="submit"
                   className="w-full md:w-auto px-8 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition"
+                  disabled={isSubmitting}
                 >
-                  Send Message
+                  {isSubmitting ? 'Sending...' : 'Send Message'}
                 </button>
               </form>
             </div>

@@ -27,6 +27,7 @@ def create_app(config_class=DevelopmentConfig):
     from routes.payment import payment_bp
     from routes.admin import admin_bp
     from routes.translate import translate_bp
+    from routes.contact import contact_bp
     
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
     app.register_blueprint(test_bp, url_prefix='/api/test')
@@ -34,6 +35,7 @@ def create_app(config_class=DevelopmentConfig):
     app.register_blueprint(payment_bp, url_prefix='/api/payment')
     app.register_blueprint(admin_bp, url_prefix='/api/admin')
     app.register_blueprint(translate_bp, url_prefix='/api')
+    app.register_blueprint(contact_bp, url_prefix='/api')
     
     # Health check endpoint
     @app.route('/')

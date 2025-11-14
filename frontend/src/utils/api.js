@@ -95,4 +95,9 @@ export const downloadCertificate = async (userId) => {
   return response.data;
 };
 
+export const sendContactMessage = async (payload) => {
+  const response = await apiClient.post('/contact/submit', payload);
+  return response.data;
+};
+
 export default apiClient;
