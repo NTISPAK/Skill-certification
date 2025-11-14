@@ -2,6 +2,7 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from models import db
+from seed_questions import seed_database
 import os
 from dotenv import load_dotenv
 
@@ -49,6 +50,8 @@ def create_app(config_class=DevelopmentConfig):
     # Create tables
     with app.app_context():
         db.create_all()
+        # Ensure questions/admin exist even on fresh deployments
+        seed_database(verbose=False)
     
     return app
 

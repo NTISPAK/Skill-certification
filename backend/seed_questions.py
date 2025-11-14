@@ -1,4 +1,3 @@
-from app import create_app
 from models import db, Question, User
 
 # MCQ data for different roles
@@ -5323,55 +5322,77 @@ MCQ_DATA = {
     ],
 }
 
-def seed_questions():
-    '''Seed the database with MCQ questions'''
-    app = create_app()
-    
-    with app.app_context():
-        print('Starting database seeding...')
-        
-        # Clear existing questions (optional - comment out if you want to keep existing data)
-        Question.query.delete()
-        
-        # Insert questions for each role
-        total_inserted = 0
-        for role, questions in MCQ_DATA.items():
-            print(f'\nSeeding questions for {role}...')
-            for q_data in questions:
-                question = Question(
-                    role=role,
-                    question_text=q_data['question_text'],
-                    option_a=q_data['option_a'],
-                    option_b=q_data['option_b'],
-                    option_c=q_data['option_c'],
-                    option_d=q_data['option_d'],
-                    correct_option=q_data['correct_option']
-                )
-                db.session.add(question)
-                total_inserted += 1
-            print(f'✓ Added {len(questions)} questions for {role}')
-        
-        # Create admin user if not exists
-        admin = User.query.filter_by(email='admin@skilltest.com').first()
-        if not admin:
-            print('\nCreating admin user...')
-            admin = User(
-                name='Admin',
-                email='admin@skilltest.com',
-                role='Admin',
-                is_admin=True
+def seed_database(verbose=True):
+    """Seed the database with MCQ questions if they are missing."""
+    if verbose:
+        print('Seeding database with MCQ questions...\n')
+
+    existing_keys = {
+        (role, question_text)
+        for role, question_text in db.session.query(Question.role, Question.question_text).all()
+    }
+
+    total_inserted = 0
+
+    for role, questions in MCQ_DATA.items():
+        added_for_role = 0
+        for question_data in questions:
+            key = (role, question_data['question_text'])
+            if key in existing_keys:
+                continue
+
+            question = Question(
+                role=role,
+                question_text=question_data['question_text'],
+                option_a=question_data['option_a'],
+                option_b=question_data['option_b'],
+                option_c=question_data['option_c'],
+                option_d=question_data['option_d'],
+                correct_option=question_data['correct_option']
             )
-            admin.set_password('admin123')
-            db.session.add(admin)
+            db.session.add(question)
+            existing_keys.add(key)
+            total_inserted += 1
+            added_for_role += 1
+
+        if verbose:
+            print(f'✓ Added {added_for_role} new questions for {role}')
+
+    admin = User.query.filter_by(email='admin@skilltest.com').first()
+    if not admin:
+        if verbose:
+            print('\nCreating admin user...')
+        admin = User(
+            name='Admin',
+            email='admin@skilltest.com',
+            role='Admin',
+            is_admin=True
+        )
+        admin.set_password('admin123')
+        db.session.add(admin)
+        if verbose:
             print('✓ Admin user created')
-        else:
-            print('\n✓ Admin user already exists')
-        
-        db.session.commit()
-        print(f'\n✅ Successfully seeded {total_inserted} questions!')
+    elif verbose:
+        print('\n✓ Admin user already exists')
+
+    db.session.commit()
+
+    if verbose:
+        print(f'\n✅ Seeded {total_inserted} new questions (existing ones skipped).')
         print('\nAdmin credentials:')
         print('Email: admin@skilltest.com')
         print('Password: admin123')
 
+    return total_inserted
+
+
+def main():
+    from app import create_app
+
+    app = create_app()
+    with app.app_context():
+        seed_database(verbose=True)
+
+
 if __name__ == '__main__':
-    seed_questions()
+    main()
