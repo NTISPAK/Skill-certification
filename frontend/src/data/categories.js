@@ -102,7 +102,7 @@ export const CATEGORIES = [
     color: 'bg-lime-100 text-lime-700'
   },
   {
-    name: 'Trala Driver',
+    name: 'Trailer Driver',
     description: 'Trailer hauling techniques and logistics compliance',
     icon: '🛻',
     color: 'bg-orange-100 text-orange-600'
