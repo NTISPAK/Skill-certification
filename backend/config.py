@@ -30,6 +30,7 @@ class Config:
     EMAILJS_TEMPLATE_ID = os.getenv('EMAILJS_TEMPLATE_ID')
     EMAILJS_PUBLIC_KEY = os.getenv('EMAILJS_PUBLIC_KEY')
     EMAILJS_PRIVATE_KEY = os.getenv('EMAILJS_PRIVATE_KEY')
+    EMAILJS_ORIGIN = os.getenv('EMAILJS_ORIGIN', 'http://localhost')
 
 
 class DevelopmentConfig(Config):

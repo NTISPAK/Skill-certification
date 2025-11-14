@@ -15,6 +15,7 @@ def _send_via_emailjs(config, payload: dict) -> None:
     template_id = config.get('EMAILJS_TEMPLATE_ID')
     public_key = config.get('EMAILJS_PUBLIC_KEY')
     private_key = config.get('EMAILJS_PRIVATE_KEY')
+    origin = config.get('EMAILJS_ORIGIN')
 
     if not all([service_id, template_id, public_key, private_key]):
         raise RuntimeError('EmailJS configuration is incomplete.')
@@ -27,7 +28,11 @@ def _send_via_emailjs(config, payload: dict) -> None:
         'template_params': payload
     }
 
-    response = requests.post(EMAILJS_ENDPOINT, json=request_body, timeout=10)
+    headers = {
+        'Origin': origin or 'http://localhost'
+    }
+
+    response = requests.post(EMAILJS_ENDPOINT, json=request_body, headers=headers, timeout=10)
     if response.status_code >= 400:
         current_app.logger.error(
             'EmailJS request failed (%s): %s', response.status_code, response.text
