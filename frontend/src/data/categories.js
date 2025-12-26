@@ -172,5 +172,11 @@ export const CATEGORIES = [
     description: 'Apply fireproof coatings safely using airless spray equipment',
     icon: '🔥',
     color: 'bg-red-100 text-red-600'
+  },
+  {
+    name: 'Excavator Operator',
+    description: 'Heavy excavation machinery operation and safety procedures',
+    icon: '🚜',
+    color: 'bg-brown-100 text-brown-600'
   }
 ];

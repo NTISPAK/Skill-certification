@@ -5319,6 +5319,210 @@ MCQ_DATA = {
             'option_d': 'Air drying only',
             'correct_option': 'B'
         }
+        
+    ],
+    "Excavator Operator": [
+        {
+            'question_text': 'What is the most important check before operating an excavator? (ax2m5n9t)',
+            'option_a': 'Radio',
+            'option_b': 'Hydraulic oil and fuel',
+            'option_c': 'Mobile phone',
+            'option_d': 'Seat',
+            'correct_option': 'B'
+        },
+        {
+            'question_text': 'What is the primary function of the hydraulic system? (bx4k7p1r)',
+            'option_a': 'Reducing noise',
+            'option_b': 'Moving the arm and bucket',
+            'option_c': 'Increasing speed',
+            'option_d': 'Saving fuel',
+            'correct_option': 'B'
+        },
+        {
+            'question_text': 'What should be done if hydraulic oil leaks? (cy6n2m8j)',
+            'option_a': 'Continue working',
+            'option_b': 'Add water',
+            'option_c': 'Immediately stop the machine and report',
+            'option_d': 'Increase speed',
+            'correct_option': 'C'
+        },
+        {
+            'question_text': 'What is the bucket used for? (dx8p5t3k)',
+            'option_a': 'Pushing',
+            'option_b': 'Excavating and lifting soil',
+            'option_c': 'Filling fuel',
+            'option_d': 'Cleaning',
+            'correct_option': 'B'
+        },
+        {
+            'question_text': 'Why is wearing a safety helmet necessary? (ex1m9r6n)',
+            'option_a': 'Because of the law',
+            'option_b': 'To protect the head from injury',
+            'option_c': 'For identification',
+            'option_d': 'To protect from heat',
+            'correct_option': 'B'
+        },
+        {
+            'question_text': 'How should an excavator be operated on a slope? (fx3k4p7t)',
+            'option_a': 'At high speed',
+            'option_b': 'Slowly and carefully',
+            'option_c': 'With the bucket raised',
+            'option_d': 'Without the bucket',
+            'correct_option': 'B'
+        },
+        {
+            'question_text': 'Why is using a mobile phone during work dangerous? (gx5n8m2j)',
+            'option_a': 'Battery runs out',
+            'option_b': 'Causes loss of concentration',
+            'option_c': 'No network signal',
+            'option_d': 'Phone becomes hot',
+            'correct_option': 'B'
+        },
+        {
+            'question_text': 'What is included in daily maintenance? (hy7p1r4k)',
+            'option_a': 'Paint',
+            'option_b': 'Seat',
+            'option_c': 'Fuel, oil, and leakage check',
+            'option_d': 'Number plate',
+            'correct_option': 'C'
+        },
+        {
+            'question_text': 'What should be done if the machine makes an unusual noise? (iy9m6t3n)',
+            'option_a': 'Ignore it',
+            'option_b': 'Increase the noise',
+            'option_c': 'Stop the machine and report',
+            'option_d': 'Change the task',
+            'correct_option': 'C'
+        },
+        {
+            'question_text': 'What damage can be caused by overloading? (jy2k8p5r)',
+            'option_a': 'Work becomes faster',
+            'option_b': 'Fuel is saved',
+            'option_c': 'The machine may get damaged',
+            'option_d': 'Noise is reduced',
+            'correct_option': 'C'
+        },
+        {
+            'question_text': 'What are control levers used for? (kx4n1m7t)',
+            'option_a': 'Lights',
+            'option_b': 'Controlling the machine',
+            'option_c': 'Filling fuel',
+            'option_d': 'Brakes',
+            'correct_option': 'B'
+        },
+        {
+            'question_text': 'What is the biggest risk while working in rain? (lw6p9r2k)',
+            'option_a': 'Slippery ground',
+            'option_b': 'Noise',
+            'option_c': 'Dust',
+            'option_d': 'Light',
+            'correct_option': 'A'
+        },
+        {
+            'question_text': 'Why is it important to follow the supervisor\'s instructions? (my8m5t4n)',
+            'option_a': 'To pass time',
+            'option_b': 'For salary',
+            'option_c': 'For safety and correct work',
+            'option_d': 'To prepare reports',
+            'correct_option': 'C'
+        },
+        {
+            'question_text': 'What should be done before changing the bucket? (ny1k7p3j)',
+            'option_a': 'Keep the machine running',
+            'option_b': 'Fill fuel',
+            'option_c': 'Turn off the machine',
+            'option_d': 'Use the horn',
+            'correct_option': 'C'
+        },
+        {
+            'question_text': 'What should be done if the brakes are not working? (ox3n9m6r)',
+            'option_a': 'Drive faster',
+            'option_b': 'Immediately stop and report',
+            'option_c': 'Finish the work',
+            'option_d': 'Lower the bucket',
+            'correct_option': 'B'
+        },
+        {
+            'question_text': 'What is the basic difference between an excavator and a backhoe loader? (py5p2t8k)',
+            'option_a': 'No difference',
+            'option_b': 'Only size',
+            'option_c': 'Design and function',
+            'option_d': 'Color',
+            'correct_option': 'C'
+        },
+        {
+            'question_text': 'What precaution is necessary when working near laborers? (qy7m4r1n)',
+            'option_a': 'Work very close',
+            'option_b': 'Make noise',
+            'option_c': 'Maintain a safe distance',
+            'option_d': 'Increase speed',
+            'correct_option': 'C'
+        },
+        {
+            'question_text': 'What can be the reason for excessive fuel consumption? (rx9k6p3t)',
+            'option_a': 'Low speed',
+            'option_b': 'Overloading and poor maintenance',
+            'option_c': 'New fuel',
+            'option_d': 'Clean filter',
+            'correct_option': 'B'
+        },
+        {
+            'question_text': 'What is most essential during a night shift? (sy2n8m5j)',
+            'option_a': 'Mobile phone',
+            'option_b': 'High speed',
+            'option_c': 'Proper lights and full attention',
+            'option_d': 'Music',
+            'correct_option': 'C'
+        },
+        {
+            'question_text': 'Where should the bucket be when parking the excavator? (tx4p1r7k)',
+            'option_a': 'In the air',
+            'option_b': 'On the ground',
+            'option_c': 'Raised',
+            'option_d': 'Anywhere',
+            'correct_option': 'B'
+        },
+        {
+            'question_text': 'When should the horn be used? (ux6m9t2n)',
+            'option_a': 'For entertainment',
+            'option_b': 'To warn workers',
+            'option_c': 'To stop work',
+            'option_d': 'To refuel',
+            'correct_option': 'B'
+        },
+        {
+            'question_text': 'What is the benefit of keeping the machine clean? (vx8k4p6r)',
+            'option_a': 'Appearance',
+            'option_b': 'Better performance and safety',
+            'option_c': 'Reduced weight',
+            'option_d': 'Less noise',
+            'correct_option': 'B'
+        },
+        {
+            'question_text': 'What should be the first step if the machine suddenly stops? (wx1n7m3t)',
+            'option_a': 'Restart immediately',
+            'option_b': 'Inform the supervisor',
+            'option_c': 'Leave the machine',
+            'option_d': 'Shake the bucket',
+            'correct_option': 'B'
+        },
+        {
+            'question_text': 'What is required to operate an excavator? (xx3p9r5k)',
+            'option_a': 'Mobile phone',
+            'option_b': 'License and experience',
+            'option_c': 'Strength',
+            'option_d': 'Speed',
+            'correct_option': 'B'
+        },
+        {
+            'question_text': 'What is the biggest sign of a safe operator? (yy5m2t8n)',
+            'option_a': 'Fast work',
+            'option_b': 'Low cost',
+            'option_c': 'Following safety rules',
+            'option_d': 'Loud noise',
+            'correct_option': 'C'
+        }
+        
     ],
 }
 
