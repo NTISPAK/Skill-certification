@@ -5,8 +5,12 @@ from datetime import timedelta
 def _normalize_database_url(url: str | None) -> str | None:
     if not url:
         return url
+    # Convert postgres:// to postgresql://
     if url.startswith('postgres://'):
-        return 'postgresql://' + url[len('postgres://') :]
+        url = 'postgresql://' + url[len('postgres://') :]
+    # Convert postgresql:// to postgresql+psycopg:// for psycopg3
+    if url.startswith('postgresql://') and '+' not in url:
+        url = url.replace('postgresql://', 'postgresql+psycopg://', 1)
     return url
 
 
