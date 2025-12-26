@@ -9,9 +9,11 @@ from dotenv import load_dotenv
 # Load environment variables from .env before importing configuration
 load_dotenv()
 
-from config import DevelopmentConfig
+from config import DevelopmentConfig, ProductionConfig
 
-def create_app(config_class=DevelopmentConfig):
+def create_app(config_class=None):
+    if config_class is None:
+        config_class = ProductionConfig if os.getenv('FLASK_ENV') == 'production' else DevelopmentConfig
     app = Flask(__name__)
     app.config.from_object(config_class)
     
